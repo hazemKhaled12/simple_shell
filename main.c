@@ -45,7 +45,7 @@ int main(int ac, char **av)
 
 			if (execve(command, args, envp) == -1)
 			{
-				perror("Command execution failed");
+				perror("./shell");
 				exit(EXIT_FAILURE);
 			}
 		}
