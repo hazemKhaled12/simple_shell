@@ -13,7 +13,6 @@
  * Return: always 0
  */
 
-
 int main(int ac, char **av)
 {
 	char command[MAX_COMMAND_LENGTH];
@@ -21,7 +20,7 @@ int main(int ac, char **av)
 
 	while (1)
 	{
-		printf("cisfun$ ");
+		printf("#cisfun$ ");
 		fflush(stdout);
 
 		if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
@@ -41,7 +40,10 @@ int main(int ac, char **av)
 		}
 		else if (pid == 0)
 		{
-			if (execve(command, NULL, NULL) == -1)
+			char *args[] = {command, NULL};
+			char *envp[] = {NULL};
+
+			if (execve(command, args, envp) == -1)
 			{
 				perror("Command execution failed");
 				exit(EXIT_FAILURE);
@@ -52,6 +54,5 @@ int main(int ac, char **av)
 			waitpid(pid, &status, 0);
 		}
 	}
-
 	return (0);
 }
