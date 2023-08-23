@@ -1,25 +1,57 @@
 #include "main.h"
+#define MAX_COMMAND_LENGTH 100
 
 /**
- * main - Entry point
+ * main - entry point
  *
- * @argc: arg count
- * @argv: arg vector
- * Return: Always 0.
+ * Description: simple shell
+ *
+ * @ac: input count
+ *
+ * @av: input array
+ *
+ * Return: always 0
  */
 
-int main(int argc, char **argv)
+
+int main(int ac, char **av)
 {
-	if (argc < 2)
+	char command[MAX_COMMAND_LENGTH];
+	int status;
+
+	while (1)
 	{
-		printf("Give a filename\n");
-		return (1);
+		printf("cisfun$ ");
+		fflush(stdout);
+
+		if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
+		{
+			printf("\n");
+			break;
+		}
+
+		command[strcspn(command, "\n")] = '\0';
+
+		pid_t pid = fork();
+
+		if (pid < 0)
+		{
+			perror("Fork failed");
+			exit(EXIT_FAILURE);
+		}
+		else if (pid == 0)
+		{
+			if (execve(command, NULL, NULL) == -1)
+			{
+				perror("Command execution failed");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			waitpid(pid, &status, 0);
+		}
 	}
-	if (access(argv[1], F_OK) == -1)
-	{
-		printf("File does not exist");
-		return (2);
-	}
-	printf("Hello world %i,  %s , %s\n", argc, argv[0], argv[1]);
+
 	return (0);
 }
