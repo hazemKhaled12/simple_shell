@@ -1,58 +1,69 @@
 #include "main.h"
-#define MAX_COMMAND_LENGTH 100
+#define BUFFER_SIZE 1024
 
 /**
  * main - entry point
  *
  * Description: simple shell
  *
- * @ac: input count
- *
- * @av: input array
  *
  * Return: always 0
  */
 
-int main(int ac, char **av)
+
+int main(void)
 {
-	char command[MAX_COMMAND_LENGTH];
-	int status;
+	char *line;
+	char prompt[] = "simple_shell$ ";
 
 	while (1)
 	{
-		printf("#cisfun$ ");
-		fflush(stdout);
+		pid_t pid = fork();
+		printf("%s", prompt);
 
-		if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
+		line = malloc(BUFFER_SIZE);
+		if (line == NULL)
+		{
+			perror("malloc");
+			exit(EXIT_FAILURE);
+		}
+
+		if (fgets(line, BUFFER_SIZE, stdin) == NULL)
 		{
 			printf("\n");
+			free(line);
 			break;
 		}
 
-		command[strcspn(command, "\n")] = '\0';
+		line[strcspn(line, "\n")] = '\0';
 
-		pid_t pid = fork();
-
-		if (pid < 0)
+		if (strcmp(line, "") == 0)
 		{
-			perror("Fork failed");
+			free(line);
+			continue;
+		}
+
+		if (pid == -1)
+		{
+			perror("fork");
 			exit(EXIT_FAILURE);
 		}
 		else if (pid == 0)
 		{
-			char *args[] = {command, NULL};
-			char *envp[] = {NULL};
-
-			if (execve(command, args, envp) == -1)
+			if (execlp(line, line, NULL) == -1)
 			{
-				perror("./shell");
+				perror("execlp");
 				exit(EXIT_FAILURE);
 			}
 		}
 		else
 		{
+			int status;
 			waitpid(pid, &status, 0);
 		}
+
+		free(line);
 	}
-	return (0);
+
+	return 0;
 }
