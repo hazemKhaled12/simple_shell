@@ -60,7 +60,7 @@ int main(void)
 
 int create_and_validate(char *line)
 {
-	char prompt[] = "simple_shell$ ";
+	char prompt[] = "cisfun$ ";
 
 	printf("%s", prompt);
 
