@@ -12,4 +12,6 @@
 #include <fcntl.h>
 #include <errno.h>
 
+int create_and_validate(char *line);
+
 #endif

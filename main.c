@@ -4,48 +4,30 @@
 /**
  * main - entry point
  *
- * Description: simple shell
+ * Description: 'this is the description'
  *
- *
- * Return: always 0
+ * Return: Always 0.
  */
-
 
 int main(void)
 {
 	char *line;
-	char prompt[] = "simple_shell$ ";
+	pid_t pid;
+	char *result;
 
 	while (1)
 	{
-		pid_t pid = fork();
-		printf("%s", prompt);
-
 		line = malloc(BUFFER_SIZE);
-		if (line == NULL)
-		{
-			perror("malloc");
-			exit(EXIT_FAILURE);
-		}
-
-		if (fgets(line, BUFFER_SIZE, stdin) == NULL)
-		{
-			printf("\n");
-			free(line);
+		result = createAndValidate(line);
+		if (result == -1)
 			break;
-		}
-
-		line[strcspn(line, "\n")] = '\0';
-
-		if (strcmp(line, "") == 0)
-		{
-			free(line);
+		if (result == 1)
 			continue;
-		}
-
+		pid = fork();
 		if (pid == -1)
 		{
 			perror("fork");
+			free(line);
 			exit(EXIT_FAILURE);
 		}
 		else if (pid == 0)
@@ -59,11 +41,49 @@ int main(void)
 		else
 		{
 			int status;
+
 			waitpid(pid, &status, 0);
 		}
-
 		free(line);
 	}
 
-	return 0;
+	return (0);
+}
+
+/**
+ * create_and_validate - something else
+ *
+ * @line: "string"
+ *
+ * Return: Always 0.
+ */
+
+int create_and_validate(char *line)
+{
+	char prompt[] = "simple_shell$ ";
+
+	printf("%s", prompt);
+
+	if (line == NULL)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+
+	if (fgets(line, BUFFER_SIZE, stdin) == NULL)
+	{
+		printf("\n");
+		free(line);
+		return (-1);
+	}
+
+	line[strcspn(line, "\n")] = '\0';
+
+	if (strcmp(line, "") == 0)
+	{
+		free(line);
+		return (1);
+	}
+
+	return (0);
 }
