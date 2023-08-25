@@ -1,5 +1,5 @@
-#ifndef _SHELL_H_
-#define _SHELL_H_
+#ifndef _MAIN_H_
+#define _MAIN_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +12,8 @@
 #include <fcntl.h>
 #include <errno.h>
 
-int create_and_validate(char *line);
+void print_to_std_out(const char *text);
+void do_command(const char *command);
+void get_command(char *command, size_t size);
 
 #endif
