@@ -19,8 +19,12 @@ void do_command(const char *command)
 	}
 	else if (first_process == 0)
 	{
-		execlp(command, command, (char *)(NULL));
-		perror("execlp");
+		char **args = malloc(sizeof(char *) * 2);
+		args[0] = (char *)command;
+		args[1] = NULL;
+
+		execve(command, args);
+		perror("execv");
 		exit(EXIT_FAILURE);
 	}
 	else

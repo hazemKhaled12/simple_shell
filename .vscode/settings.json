@@ -3,6 +3,7 @@
     "stat.h": "c",
     "main.h": "c",
     "unistd.h": "c",
-    "errno.h": "c"
+    "errno.h": "c",
+    "types.h": "c"
   }
 }
