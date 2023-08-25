@@ -13,12 +13,12 @@ int main(void)
 {
 	char *line;
 	pid_t pid;
-	char *result;
+	int result;
 
 	while (1)
 	{
 		line = malloc(BUFFER_SIZE);
-		result = createAndValidate(line);
+		result = create_and_validate(line);
 		if (result == -1)
 			break;
 		if (result == 1)
