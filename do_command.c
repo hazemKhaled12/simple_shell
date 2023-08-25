@@ -1,5 +1,5 @@
 #include "main.h"
-
+#define ARGS_BUFFER 130
 /**
  * do_command - Exucte the command using execve
  *
@@ -19,12 +19,22 @@ void do_command(const char *command)
 	}
 	else if (first_process == 0)
 	{
-		char **args = malloc(sizeof(char *) * 2);
-		args[0] = (char *)command;
-		args[1] = NULL;
+		char *args[ARGS_BUFFER];
+		int arg_counter = 0;
+		char *token;
 
-		execve(command, args);
-		perror("execv");
+		token = strtok((char *)command, " ");
+		while (token != NULL)
+		{
+			args[arg_counter++] = token;
+			token = strtok(NULL, " ");
+		}
+
+		args[arg_counter] = NULL;
+
+		execvp(args[0], args);
+
+		print_to_std_out("Error excuting command.\n");
 		exit(EXIT_FAILURE);
 	}
 	else
