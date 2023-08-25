@@ -5,11 +5,12 @@
  * main - entry point
  *
  * Description: 'this is the description'
- *
+ * @argc: arg count
+ * @argv: args array
  * Return: Always 0.
  */
 
-int main(void)
+int main(int __attribute__((__unused__)) argc, char **argv)
 {
 	char *line;
 	pid_t pid;
@@ -34,7 +35,7 @@ int main(void)
 		{
 			if (execlp(line, line, NULL) == -1)
 			{
-				perror("execlp");
+				perror(argv[0]);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -60,7 +61,7 @@ int main(void)
 
 int create_and_validate(char *line)
 {
-	char prompt[] = "cisfun$ ";
+	char prompt[] = "#cisfun$ ";
 
 	printf("%s", prompt);
 
