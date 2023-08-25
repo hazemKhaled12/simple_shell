@@ -7,18 +7,19 @@
  * Description: 'this is the description'
  * @argc: arg count
  * @argv: args array
+ * @envp: array of env
  * Return: Always 0.
  */
 
-int main(int __attribute__((__unused__)) argc, char **argv)
+int main(int __attribute__((__unused__)) argc,
+		char *argv[], char __attribute__((__unused__)) *envp[])
 {
-	char *line;
+	char line[BUFFER_SIZE];
 	pid_t pid;
 	int result;
 
 	while (1)
 	{
-		line = malloc(BUFFER_SIZE);
 		result = create_and_validate(line);
 		if (result == -1)
 			break;
@@ -28,12 +29,11 @@ int main(int __attribute__((__unused__)) argc, char **argv)
 		if (pid == -1)
 		{
 			perror("fork");
-			free(line);
 			exit(EXIT_FAILURE);
 		}
 		else if (pid == 0)
 		{
-			if (execlp(line, line, NULL) == -1)
+			if (execl(line, line, NULL) == -1)
 			{
 				perror(argv[0]);
 				exit(EXIT_FAILURE);
@@ -45,7 +45,6 @@ int main(int __attribute__((__unused__)) argc, char **argv)
 
 			waitpid(pid, &status, 0);
 		}
-		free(line);
 	}
 
 	return (0);
@@ -65,16 +64,9 @@ int create_and_validate(char *line)
 
 	printf("%s", prompt);
 
-	if (line == NULL)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-
 	if (fgets(line, BUFFER_SIZE, stdin) == NULL)
 	{
 		printf("\n");
-		free(line);
 		return (-1);
 	}
 
@@ -82,7 +74,6 @@ int create_and_validate(char *line)
 
 	if (strcmp(line, "") == 0)
 	{
-		free(line);
 		return (1);
 	}
 
