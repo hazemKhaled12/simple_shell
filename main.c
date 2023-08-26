@@ -16,6 +16,7 @@ int main(void)
 	{
 		print_to_std_out("#HazemShell$ ");
 		get_command(command_line, sizeof(command_line));
+		exit_program(command_line);
 		do_command(command_line);
 	}
 

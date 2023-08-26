@@ -4,6 +4,7 @@
     "main.h": "c",
     "unistd.h": "c",
     "errno.h": "c",
-    "types.h": "c"
+    "types.h": "c",
+    "string.h": "c"
   }
 }

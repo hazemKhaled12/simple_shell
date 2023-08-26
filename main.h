@@ -13,7 +13,8 @@
 #include <errno.h>
 
 void print_to_std_out(const char *text);
-void do_command(const char *command);
 void get_command(char *command, size_t size);
+void exit_program(const char *command);
+void do_command(const char *command);
 
 #endif
