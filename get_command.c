@@ -14,7 +14,6 @@ void get_command(char *command, size_t size)
 {
 	if (fgets(command, size, stdin) == NULL)
 	{
-		printf("hey");
 		if (feof(stdin))
 		{
 			print_to_std_out("\n");
