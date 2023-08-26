@@ -32,7 +32,7 @@ void do_command(const char *command)
 
 		args[arg_counter] = NULL;
 
-		execv(args[0], args);
+		execvp(args[0], args);
 
 		print_to_std_out("Error excuting command.\n");
 		exit(EXIT_FAILURE);
